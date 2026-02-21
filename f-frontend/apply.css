@@ -1,0 +1,44 @@
+body{
+    display: flex;
+    height: 95vh;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(156, 187, 213, 0.667);
+    font-size: large;
+}
+
+#apply{
+    box-shadow: 0 4px 6px rgba(29, 47, 62, 0.667);
+    background-color: rgb(27, 174, 211);
+    display: flex;
+    padding: 30px;
+    border: 1px solid rgb(175, 175, 225);
+    border-radius: 15px;
+    flex-direction: column;
+    width: 220px;
+}
+
+#apply:hover{
+    transform: scale(1.05);
+    transition-duration: 1s;
+    box-shadow: 0 6px 8px rgba(29, 47, 62, 0.667);
+}
+
+.radio{
+     background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(190, 157, 157);
+    border-radius: 10px;
+    margin: 5px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.radio :hover{
+     
+    transition-duration: 0.5s;
+}
+.radio :active{
+    opacity: 0.5;
+}
+

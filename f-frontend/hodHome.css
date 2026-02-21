@@ -1,0 +1,83 @@
+body {
+    height: 100vh;
+    margin: 0;        /* Removes default browser margins */
+    display: flex;   /* Go back to standard block layout */
+    /* Removed align-items and flex */
+    align-items:flex-start;
+}
+
+.main2 {
+    display: block;   /* Ensures content stacks vertically */
+    width: 100%;
+    padding-top: 20px; /* Adds space at the top */
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    width: 90%;       /* CHANGE THIS: 90% makes it stretch to fit the iframe */
+    margin: 0 auto;   /* This centers the bar horizontally */
+    margin-top: 20px;
+    background-color: rgb(227, 199, 219);
+    height: 100px;
+    border-radius: 20px;
+    box-shadow: 0 4px 6px rgba(6, 0, 0, 0.427);
+    margin-bottom: 20px;
+}
+
+.status h6 {
+    flex: 1;          /* This is good, keeps items equal width */
+    border: 1px solid rgb(244, 244, 241);
+    border-radius: 30px;
+    margin: 0 15px;   /* Adjusted margin for cleaner spacing */
+    padding: 20px;
+    height: 30px;
+    text-align: center;
+    background-color: rgb(222, 175, 206);
+    color: rgb(233, 12, 12);
+    font-size: larger;
+    /* Remove large margins that might break the layout on small screens */
+}
+
+.table {
+    width: 90%;               
+    margin: 40px auto;      
+    margin-top: 50px;  
+    border-collapse: collapse;
+    background-color: white;  
+    border-radius: 10px;      
+    overflow: hidden;         
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+    font-family: sans-serif;
+    font-size: large;
+}
+
+/* Table Cells and Headers */
+.table th, .table td {
+    padding: 15px;            
+    text-align: left;         
+    border-bottom: 1px solid #ddd;
+    height: 45px;
+    font-size: large;
+}
+
+.table-title {
+    background-color: rgb(211, 27, 76); 
+    color: white;
+    text-align: center !important; 
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: larger;
+}
+
+.column-headers th {
+    background-color: rgb(217, 229, 237); 
+    color: rgb(19, 64, 67);
+    font-size: large;
+}
+
+
+
+.status-rejected { color: red; font-weight: bold; }
+.status-approved { color: green; font-weight: bold; }

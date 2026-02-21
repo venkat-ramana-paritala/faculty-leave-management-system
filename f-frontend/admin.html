@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin dashboard</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div id="top">
+    <img src="images/logo.jpg" alt="kitsw-logo" id="logo"> 
+    <h4 id="clg">Kakatiya Institute Of Technology & Science, Warangal</h4>
+    <h5 id="fac">Welcome, Admin!</h5>
+    <button type="submit" id="logout" style="font-size: large;" onclick="logout(event)">Logout</button >
+    </div>
+    <div class="main">
+    <div class="left">
+        <button id="home" type="button" onclick="loadPage('adminFaculty.html')">Faculty</button>
+        <button id="apply" type="button" onclick="loadPage('adminCreateFaculty.html')">Create Faculty</button>
+        <button id="history" type="button" onclick="loadPage('adminHOD.html')">HOD</button>
+        <button id="rules" type="button" onclick="loadPage('adminCreateHOD.html')">Create HOD</button>
+        <button id="almanac" type="button" onclick="loadPage('adminLeaves.html')">Leaves</button>
+        <button id="profile" type="button" onclick="loadPage('adminProfile.html')">Profile</button>
+        
+    </div>
+
+     <div class="main2">
+      <iframe id="mainFrame" name="mainFrame" src="adminFaculty.html" frameborder="0"></iframe>
+    </div>
+    <script src="trial.js"></script>
+    <script>
+      async function logout(event){
+          try{
+            if(event){
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            const response = await fetch('http://localhost:4000/auth/admin/logout',{
+                method:'POST',
+                credentials:"include"
+            })
+            if(response.status===401||response.status===403){
+                alert('You are not logged in');
+                return;
+            }
+            if(response.status===404){
+                alert('Something is wrong,try again')
+            }
+            const result = response.json();
+            if(response.ok){
+                alert('Logged out');
+                window.location.href='index.html';
+            }
+          }
+          catch(err){
+            alert('Error : ',err.mssg);
+          }
+      }
+    </script>
+</body>
+</html>

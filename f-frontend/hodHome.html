@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="hodHome.css">
+</head>
+<body>
+    <div class="main2">
+
+    <div class="status">
+        <h6 id="pending">You have 1 pending leave requests</h6>
+    </div>
+
+    <div class="recent">
+    <table class="table">
+        <thead>
+            <tr>
+                <th colspan="5" class="table-title">Recent Applications</th>
+            </tr>
+            <tr class="column-headers">
+                <th>FROM</th>
+                <th>TO</th>
+                <th>TYPE</th>
+                <th>STATUS</th>
+                <th>FACULTY</th>
+            </tr>
+        </thead>
+        
+        <tbody id="tbody" class="tbody">
+           
+
+        </tbody>
+    </table>
+    </div>
+    </div>
+    <script src="trial.js"></script>
+    <script>
+
+    function cleanDate(s){
+        const a = new Date(s);
+        return a.toLocaleDateString();
+    }
+
+        window.onload =async function(){
+            try{
+                let tbody = document.getElementById("tbody");
+                const response = await fetch('http://localhost:4000/hod/home',{
+                    method:'GET',
+                    credentials :"include"
+                })
+                if(response.status===401||response.status===403){
+                    document.getElementById("pending").textContent="You're not logged in";
+                    return;
+                }
+                if(response.status===404){
+                    tbody = `<tr><td>No previous resolved leaves found</td></tr>`;
+                    return;
+                }
+                const result = await response.json();
+                document.getElementById("pending").textContent=`You have ${result.pending_requests} pending leave requests`;
+                tbody.innerHTML="";
+                result.recent_history.forEach(leave=>{
+                    let status="";
+                    if(leave.status==='Approved'){
+                        status='status-approved';
+                    }
+                    else if(leave.status==='Rejected'){
+                        status='status-rejected';
+                    }
+                    const row = `
+                    <tr>
+                        <td>${cleanDate(leave.from)}</td>
+                        <td>${cleanDate(leave.to)}</td>
+                        <td>${leave.type}</td>
+                        <td class="${status}">${leave.status}</td>
+                        <td>${leave.faculty_name}</td>
+                    </tr>
+                    `;
+                    tbody.innerHTML+=row;
+                })
+            }
+            catch(err){
+                alert(err);
+            }
+        }
+    </script>
+</body>
+</html>

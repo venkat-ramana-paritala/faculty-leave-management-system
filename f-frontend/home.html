@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="home.css">
+</head>
+<body>
+    <div class="main2">
+     <p id="message"></p>
+    <div class="status">
+        <h6 id="total">Total leaves : 12</h6>
+        <h6 id="used">Used leaves : 0</h6>
+        <h6 id="left">Leaves left: 12</h6>
+    </div>
+
+    <div class="recent">
+    <table class="table">
+        <thead>
+            <tr>
+                <th colspan="4" class="table-title">Recent Applications</th>
+            </tr>
+            <tr class="column-headers">
+                <th>FROM</th>
+                <th>TO</th>
+                <th>TYPE</th>
+                <th>STATUS</th>
+            </tr>
+        </thead>
+        
+        <tbody id="tableBody">
+            <!-- <tr>
+                <td>25 Jan 2026</td>
+                <td>27 Jan 2026</td>
+                <td>Sick Leave</td>
+                <td class="status-pending">Pending</td>
+            </tr>
+            <tr>
+                <td>10 Dec 2025</td>
+                <td>10 Dec 2025</td>
+                <td>Casual</td>
+                <td class="status-approved">Approved</td>
+            </tr> -->
+        </tbody>
+    </table>
+    </div>
+    </div>
+    <script src="trial.js"></script>
+    <script>
+
+        function cleanDate(date){
+            const d = new Date(date);
+            return d.toLocaleDateString();
+        }
+
+        window.onload = async function(){
+            try{
+                let tableBody = document.getElementById("tableBody");
+                tableBody.innerHTML = "";
+               const response = await fetch('http://localhost:4000/faculty/home',{
+                method : 'GET',
+                credentials : "include" 
+               })
+               if(response.status===401||response.status===403){
+                   document.getElementById('message').textContent="You are not logged in";
+                   return;
+               }
+               if(response.status===404){
+                  tableBody.innerHTML = '<tr><td colspan="4"> No leaves found</td></tr>';
+                  return;
+               }
+               const data = await response.json();
+               document.getElementById("total").textContent=`Total Leaves: ${data.total}`;
+               document.getElementById("used").textContent=`Used Leaves: ${data.used}`;
+               document.getElementById("left").textContent=`Leaves left: ${data.left}`;
+               data.leave.forEach(leave=>{
+                let status="status-pending"
+                if(leave.status==='Approved'){
+                    status='status-approved'
+                }
+                else if(leave.status==='Rejected'){
+                    status='status-rejected'
+                }
+                else if(leave.status==='Pending'){
+                    status='status-pending'
+                }
+
+                let row=`
+                 <tr>
+                      <td>${cleanDate(leave.from)}</td>
+                      <td>${cleanDate(leave.to)}</td>
+                      <td>${leave.type}</td>
+                      <td class="${status}">${leave.status}</td>
+                </tr>
+                `;
+                tableBody.innerHTML+=row;
+               })
+            }
+            catch(err){
+                document.getElementById("message").textContent="Some error occured...";
+            }
+        }
+    </script>
+</body>
+</html>

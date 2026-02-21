@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+    body {
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        font-family: sans-serif;
+        background-color: transparent; /* Or #f0f9ff if you want a light bg */
+        margin: 0;
+    }
+
+    h2 {
+        color: rgb(9, 105, 231);
+        margin-bottom: 5px;
+    }
+
+    h3 {
+        color: rgb(46, 4, 86); 
+        margin-top: 0;
+        margin-bottom: 20px;
+    }
+
+    #loginBox {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center; /* Center content inside the card */
+        
+        /* YOUR SIGNATURE CARD STYLE */
+        background-color: azure;
+        width: 300px; /* Slightly wider for inputs */
+        padding: 30px;
+        border: 1px solid rgb(46, 4, 86);
+        border-radius: 10px; /* Rounded corners like your profile */
+        box-shadow: 0 3px 4px rgb(4, 78, 86); /* Your specific shadow color */
+    }
+
+    form {
+        width: 100%;
+        text-align: left; /* Keep labels aligned left */
+    }
+
+    label {
+        font-weight: bold;
+        color: rgb(4, 78, 86); /* Matching the shadow tone */
+        display: block;
+        margin-top: 10px;
+    }
+
+    input, select {
+        width: 95%; /* Fits nicely inside the card */
+        padding: 8px;
+        margin-top: 5px;
+        border: 1px solid rgb(46, 4, 86);
+        border-radius: 5px;
+        outline: none;
+        font-size: 14px;
+    }
+
+    input:focus, select:focus {
+        box-shadow: 0 0 5px rgb(91, 162, 244); /* Light blue glow */
+    }
+
+    button {
+        width: 100%;
+        margin-top: 20px;
+        padding: 10px;
+        background-color: rgb(9, 105, 231); /* Your header blue */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.1s;
+    }
+
+    button:active {
+        transform: scale(0.98);
+    }
+
+    #err-msg {
+        color: red;
+        font-weight: bold;
+        margin: 0;
+        min-height: 20px; /* Prevents jumping if empty */
+    }
+
+    </style>
+</head>
+<body>
+    <h2>FACULTY LEAVE MANAGEMENT</h2>
+    <h3>Welcome, User!</h3>
+    <div id="loginBox">
+        <p id="err-msg"></p>
+    <label for="login" id="label">Login</label>
+    <form name="login" id="login" onsubmit="userLogin(event)">
+            
+            <select name="role" class="select" id="role" onchange="updateLabel()">
+                <option id="admin" value="admin">admin</option>
+                <option id="hod" value="hod">HOD</option>
+                <option id="faculty" value="faculty" selected>faculty</option>
+            </select>
+         <br>
+         <label for="username" id="userlabel">Enter faculty code:</label><br>
+         <input id="username" name="username" type="text" required><br>
+          <label for="password" id="passlabel">Enter password:</label><br>
+         <input type="password" id="password" name="password" required>
+          <br>
+         <button type="submit" name="submit">Login</button>
+    </form>
+    </div>
+    <script>
+        function updateLabel(){
+            const role = document.login.role.value;
+            if(role==="faculty"){
+                document.getElementById("userlabel").textContent="Enter faculty code:";
+            }
+            else if(role==='admin'){
+                document.getElementById("userlabel").textContent="Enter admin id:";
+            }
+            else if(role==='hod'){
+                document.getElementById("userlabel").textContent="Enter department code";
+            }
+        }
+
+        async function userLogin(event){
+            event.preventDefault();
+            const role = document.login.role.value;
+            const data = {};
+            data.password = document.login.password.value;
+            if(role==='admin'){
+                data.admin_id = document.login.username.value;
+            }
+            else if(role==='hod'){
+                data.department = document.login.username.value;
+            }
+            else if(role==='faculty'){
+                data.faculty_code = document.login.username.value;
+            }
+            try{
+                const response = await fetch(`http://localhost:4000/auth/${role}/login`,{
+                    method : "POST",
+                    headers : {
+                        "Content-Type" : "application/json"
+                    },
+                    body : JSON.stringify(data),
+                    credentials : "include"
+                });
+                if(response.ok){
+                    if(role==='faculty') window.location.href='faculty.html';
+                    else if(role==='hod') window.location.href='hod.html';
+                    else if(role==='admin') window.location.href='admin.html';
+                }
+                else{
+                     document.getElementById("err-msg").textContent='Login failed'
+                }
+            }
+            catch(err){
+                console.error("server down or cors error");
+            }
+        }
+    </script>
+</body>
+</html>

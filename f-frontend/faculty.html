@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Leave Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="top">
+    <img src="images/logo.jpg" alt="kitsw-logo" id="logo"> 
+    <h4 id="clg">Kakatiya Institute Of Technology & Science, Warangal</h4>
+    <h5 id="fac">Welcome, Faculty!</h5>
+    <button type="submit" id="logout" onclick="logout(event)">Logout</button >
+    </div>
+    <div class="main">
+    <div class="left">
+        <button id="home" type="button" onclick="loadPage('home.html')">Home</button>
+        <button id="apply" type="button" onclick="loadPage('apply.html')">Apply Leave</button>
+        <button id="history" type="button" onclick="loadPage('leaveHistory.html')">Leave History</button>
+        <button id="rules" type="button" onclick="loadPage('rules.html')">Rules and Regulations</button>
+        <button id="almanac" type="button" onclick="loadPage('almanac.html')">Almanac</button>
+        <button id="faq" type="button" onclick="loadPage('faq.html')">HELP</button>
+        <button id="profile" type="button" onclick="loadPage('facultyProfile.html')">Profile</button>
+    </div>
+
+     <div class="main2">
+      <iframe id="mainFrame" name="mainFrame" src="home.html" frameborder="0"></iframe>
+    </div>
+    <script src="trial.js"></script>
+
+    <script>
+       async function logout(event){
+        if(event)
+       {
+        event.preventDefault();
+       }
+        try{
+            const response = await fetch('http://localhost:4000/auth/faculty/logout',{
+                method : 'POST',
+                credentials:"include"
+            })
+            const result = await response.json();
+            if(response.ok){
+                alert(`Logged out successfully`);
+                window.location.href='index.html';
+                return;
+            }
+            else{
+                console.log(result);
+                alert(`${result}`);
+            }
+        }  
+        catch(err){
+            console.log(err);
+            alert(`${err}`);
+        }
+       }
+    </script>
+
+</body>
+</html>

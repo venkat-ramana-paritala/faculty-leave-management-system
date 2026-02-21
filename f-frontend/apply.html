@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply</title>
+    <link rel="stylesheet" href="apply.css">
+</head>
+<body>
+    <form name="f1" id="apply" onsubmit="return validate(event); return false">
+        <label for="from" style="color: white;">FROM</label>
+        <input type="date" id="from" name="from" required ><br>
+        
+        <label for="to" style="color: white;">TO</label>
+        <input type="date" id="to" name="to" required><br>
+
+       
+       <caption style="color: white;">Leave Type</caption>
+       <div class="radio">
+       <input type="radio" name="type" id="medical" value="Medical">
+        <label for="medical">Medical</label>
+        </div>
+        <div class="radio">
+        <input type="radio" name="type" id="casual" value="Casual">
+        <label for="casual">Casual</label> 
+        </div>
+        <div class="radio">
+        <input type="radio" name="type" id="paid" value="Paid">
+        <label for="paid">Paid</label>
+        </div>
+        <br>
+        <input type="submit" value="submit" >
+        </form>
+
+
+
+   <script src="trial.js"></script> 
+
+<script>
+    function formatDate(dateObj) {
+        return dateObj.toISOString().split('T')[0];
+    }
+
+    const fromInput = document.getElementById("from");
+    const toInput = document.getElementById("to");
+
+    const todayObj = new Date();
+    const todayString = formatDate(todayObj);
+
+    fromInput.min = todayString;
+    toInput.min = todayString;
+
+    const maxObj = new Date();
+    maxObj.setMonth(maxObj.getMonth() + 2);
+    const maxString = formatDate(maxObj);
+
+    fromInput.max = maxString;
+    toInput.max = maxString;
+
+    fromInput.addEventListener("change", function() {
+        toInput.min = this.value; 
+    });
+
+</script>
+
+</body>
+</html>

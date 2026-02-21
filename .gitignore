@@ -1,0 +1,6 @@
+node_modules/
+f-backend/node_modules/
+
+.env
+.env.*
+f-backend/.env

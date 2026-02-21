@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave History</title>
+    <style>
+       body{
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            font-family: sans-serif;
+            background-color: transparent;
+        }
+        .table {
+               width: 90%;               
+               margin: 60px auto;        
+               border-collapse: collapse;
+               background-color: white;  
+               border-radius: 10px;      
+               overflow: hidden;         
+               box-shadow: 0 6px 8px rgba(0,0,0,0.1); 
+               font-family: sans-serif;
+               }
+
+
+               .table th, .table td {
+                padding: 25px;            
+                text-align: left;         
+                border-bottom: 1px solid #ddd; 
+                font-size: large;
+                }
+
+               .table-title {
+                background-color: rgb(122, 27, 211); 
+                color: white;
+                text-align: center !important; 
+                font-size: 28px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                }
+
+                .col-headers th {
+                 background-color: rgb(217, 229, 237); 
+                 color: rgb(19, 64, 67);
+                 font-size: 22px;
+                  }
+
+                .err-message { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Faculty records</h1>
+    <table class="table" id="historyTable">
+        <thead>
+            <tr>
+               <th colspan="4" class="table-title">Faculty list</th>
+            </tr>
+            <tr class="col-headers">
+               <th>Name</th>
+               <th>Faculty code</th>
+               <th>Leaves left</th>
+               <th>Department</th>
+            </tr>
+        </thead>
+        <tbody class="tbody" id="tbody">
+            <tr>
+                <td colspan="4">Loading the faculty list...</td>
+            </tr>
+        </tbody>
+    </table>
+    <p id="message" class="err-message"></p>
+    <script>
+        window.onload = async ()=>{
+           fetchFaculty();
+        }
+        async function fetchFaculty() {
+            try{
+                const response = await fetch("http://localhost:4000/admin/faculty",{
+                    method :"GET",
+                    credentials :"include"
+                });
+                const tableBody = document.getElementById("tbody");
+                const message = document.getElementById("message");
+                if(response.status===401||response.status===403){
+                    message.textContent="You are not logged in";
+                    tableBody.innerHTML = "";
+                    return;
+                }
+                if(response.status===404){
+                    tableBody.innerHTML = "<tr><td colspan='4'>No Faculty records found</td></tr>"
+                    return;
+                }
+                const facs = await response.json();
+                tableBody.innerHTML="";
+                facs.forEach(f=>{
+                    const row = `
+                    <tr>
+                        <td>${f.name}</td>
+                        <td>${f.faculty_code}</td>
+                        <td>${f.leaves_left}</td>
+                        <td>${f.department}</td>
+                    </tr>
+                    `;
+                    tableBody.innerHTML+=row;
+                });
+                
+            }
+            catch(err){
+                console.error("Error : "+err);
+                document.getElementById("message").textContent="Failed to load faculty record";
+            }
+        }
+        fetchFaculty()
+    </script>
+</body>
+</html>

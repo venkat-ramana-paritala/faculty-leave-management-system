@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        #f1{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 10px;
+            border: 1px solid violet;
+            border-radius: 5px;
+            background-color: rgb(234, 197, 234);
+            transition-duration: 1s;
+        }
+        #f1:hover{
+            transform: scale(1.05);
+            box-shadow: 0 4px 6px rgb(130, 10, 130);
+        }
+    </style>
+</head>
+<body>
+    <p>create hod</p>
+    <form id="f1" name="f1" onsubmit="return validateForm(event)">
+        <label for="name" id="nameLabel">Name :</label>
+        <input type="text" id="name" name="name" required><br>
+        <label for="department" id="deptLabel">Department :</label>
+        <input type="text" id="department" name="department" required><br>
+        <button type="submit" name="submit">Create</button>
+    </form>
+    <script>
+        async function validateForm(event) {
+            try{
+            if(event){
+                event.preventDefault();
+            }
+            const name = document.f1.name.value;
+            const department = document.f1.department.value;
+            if(!/^[a-zA-Z .]+$/.test(name)){
+                alert('Name can be of only alphabets')
+                return false;
+            }
+            if(!/^[A-Z]{3,5}$/.test(department)){
+                alert('Department must contain character length pf 3 to 5 and only uppercase allowed');
+                return false;
+            }
+            const data = {};
+            data.name = name;
+            data.department = department;
+            const response = await fetch('http://localhost:4000/admin/hod',{
+                method:'POST',
+                headers:{
+                    "Content-Type" : "application/json"
+                },
+                body: JSON.stringify(data),
+                credentials:"include"
+            });
+            const result = await response.json();
+            if(response.ok){
+                alert('HOD created successfullyy');
+                return true;
+            }
+            else{
+                alert(result.message||result.mssg);
+                return false;
+            }
+        }
+        catch(err){
+            alert("Error : "+err.message);
+        }
+        }
+    </script>
+</body>
+</html>

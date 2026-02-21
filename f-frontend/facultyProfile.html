@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <style>
+        body{
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            font-family: sans-serif;
+        }
+        #profile{
+            padding: 20px;
+            border: 1px solid rgb(46, 4, 86);
+            border-radius: 7px;
+            width: 300px; /* Made slightly wider to fit buttons */
+            background-color: azure;
+            box-shadow: 0 3px 4px rgb(4, 78, 86);
+            text-align: center;
+        }
+        h2{
+            padding: 5px;
+            color: rgb(91, 162, 244);
+            font-size: 18px;
+            margin: 5px 0;
+            text-align: left;
+        }
+        
+        /* Simple Buttons */
+        button {
+            margin: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        
+        /* Hidden Forms */
+        .hidden-form {
+            display: none;
+            margin-top: 10px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+        input {
+            width: 90%;
+            padding: 5px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 style="color: rgb(9, 105, 231);">Profile</h1>
+    
+    <div id="profile">
+        <h2 id="name">Name : Loading...</h2>
+        <h2 id="fc">Faculty Code : </h2>
+        <h2 id="dept">Department : </h2>
+        <h2 id="ll">Leaves Left : </h2>
+        
+        <br>
+        <button onclick="showForm('nameForm')">Edit Name</button>
+        <button onclick="showForm('passForm')">Change Password</button>
+
+        <div id="nameForm" class="hidden-form">
+            <input type="text" id="newName" placeholder="New Name">
+            <br>
+            <button onclick="updateProfile('name')">Save</button>
+            <button onclick="hideForms()">Cancel</button>
+        </div>
+
+        <div id="passForm" class="hidden-form">
+            <input type="password" id="newPass" placeholder="New Password">
+            <br>
+            <button onclick="updateProfile('password')">Update</button>
+            <button onclick="hideForms()">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // 1. Load Data
+        window.onload = async () => {
+            loadData();
+        }
+
+        async function loadData(){
+            try {
+                const response = await fetch('http://localhost:4000/faculty/profileData', {
+                    credentials: "include"
+                });
+                if(response.ok){
+                    const data = await response.json();
+                    document.getElementById('name').textContent = `Name : ${data.name}`;
+                    document.getElementById('fc').textContent = `Faculty Code : ${data.faculty_code}`;
+                    document.getElementById('dept').textContent = `Department : ${data.department}`;
+                    document.getElementById('ll').textContent = `Leaves Left : ${data.leaves_left}`;
+                    
+                    // Fill the input box
+                    document.getElementById('newName').value = data.name;
+                }
+            } catch(err) {
+                console.log(err);
+            }
+        }
+
+        // 2. Show/Hide Logic
+        function showForm(id){
+            hideForms();
+            document.getElementById(id).style.display = 'block';
+        }
+
+        function hideForms(){
+            document.getElementById('nameForm').style.display = 'none';
+            document.getElementById('passForm').style.display = 'none';
+        }
+
+        // 3. Update Logic
+        async function updateProfile(type){
+            const data = {};
+            
+            if(type === 'name'){
+                const val = document.getElementById('newName').value;
+                if(!val) return alert("Name empty");
+                data.name = val;
+            } 
+            else if(type === 'password'){
+                const val = document.getElementById('newPass').value;
+                if(!val) return alert("Password empty");
+                data.password = val;
+            }
+
+            try {
+                const response = await fetch('http://localhost:4000/faculty/profile', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                    credentials: 'include'
+                });
+
+                const result = await response.json();
+                
+                if(response.ok){
+                    alert(result.mssg);
+                    hideForms();
+                    loadData(); // Refresh names
+                } else {
+                    alert(result.mssg);
+                }
+            } catch(err){
+                alert("Error: " + err);
+            }
+        }
+    </script>
+</body>
+</html>

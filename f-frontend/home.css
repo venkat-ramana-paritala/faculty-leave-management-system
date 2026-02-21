@@ -1,0 +1,75 @@
+body {
+    height: 100vh;
+    margin: 0;        /* Removes default browser margins */
+    display: block;   /* Go back to standard block layout */
+    /* Removed align-items and flex */
+}
+
+.main2 {
+    display: block;   
+    width: 100%;
+    padding-top: 30px; /* Adds space at the top */
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    width: 90%;       /* CHANGE THIS: 90% makes it stretch to fit the iframe */
+    margin: 10px auto;   /* This centers the bar horizontally */
+    background-color: rgb(217, 229, 237);
+    height: 105px;
+    border-radius: 30px;
+    box-shadow: 0 4px 6px rgba(6, 0, 0, 0.427);
+}
+
+.status h6 {
+    flex: 1;          /* This is good, keeps items equal width */
+    border: 1px solid rgb(244, 244, 241);
+    border-radius: 30px;
+    margin: 0 22px;   /* Adjusted margin for cleaner spacing */
+    padding: 22px;
+    text-align: center;
+    background-color: rgb(175, 222, 221);
+    color: rgb(115, 24, 194);
+    font-size: large;
+    /* Remove large margins that might break the layout on small screens */
+}
+
+.table {
+    width: 90%;               
+    margin: 60px auto;        
+    border-collapse: collapse;
+    background-color: white;  
+    border-radius: 10px;      
+    overflow: hidden;         
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+    font-family: sans-serif;
+}
+
+/* Table Cells and Headers */
+.table th, .table td {
+    padding: 25px;            
+    text-align: left;         
+    border-bottom: 1px solid #ddd; 
+    font-size: large;
+}
+
+.table-title {
+    background-color: rgb(27, 174, 211); 
+    color: white;
+    text-align: center !important; 
+    font-size: 28px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.column-headers th {
+    background-color: rgb(217, 229, 237); 
+    color: rgb(19, 64, 67);
+    font-size: 22px;
+}
+
+
+.status-rejected{color: red;font-weight: bold;}
+.status-pending { color: orange; font-weight: bold; }
+.status-approved { color: green; font-weight: bold; }

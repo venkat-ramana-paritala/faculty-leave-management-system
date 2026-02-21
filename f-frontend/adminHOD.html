@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOD records</title>
+    <style>
+       body{
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            font-family: sans-serif;
+            background-color: transparent;
+        }
+        .table {
+               width: 90%;               
+               margin: 60px auto;        
+               border-collapse: collapse;
+               background-color: white;  
+               border-radius: 10px;      
+               overflow: hidden;         
+               box-shadow: 0 6px 8px rgba(0,0,0,0.1); 
+               font-family: sans-serif;
+               }
+
+
+               .table th, .table td {
+                padding: 25px;            
+                text-align: left;         
+                border-bottom: 1px solid #ddd; 
+                font-size: large;
+                }
+
+               .table-title {
+                background-color: rgb(122, 27, 211); 
+                color: white;
+                text-align: center !important; 
+                font-size: 28px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                }
+
+                .col-headers th {
+                 background-color: rgb(217, 229, 237); 
+                 color: rgb(19, 64, 67);
+                 font-size: 22px;
+                  }
+
+                .err-message { color: red; }
+    </style>
+</head>
+<body>
+    <h1> Leaves history</h1>
+    <table class="table" id="historyTable">
+        <thead>
+            <tr>
+               <th colspan="4" class="table-title">HOD list</th>
+            </tr>
+            <tr class="col-headers">
+               <th>S.no </th>
+               <th>Name</th>
+               <th>Department</th>
+            </tr>
+        </thead>
+        <tbody class="tbody" id="tbody">
+            <tr>
+                <td colspan="4">Loading the HOD list...</td>
+            </tr>
+        </tbody>
+    </table>
+    <p id="message" class="err-message"></p>
+    <script>
+        window.onload = async ()=>{
+           fetchHOD();
+        }
+        async function fetchHOD() {
+            try{
+                const response = await fetch("http://localhost:4000/admin/hod",{
+                    method :"GET",
+                    credentials :"include"
+                });
+                const tableBody = document.getElementById("tbody");
+                const message = document.getElementById("message");
+                if(response.status===401||response.status===403){
+                    message.textContent="You are not logged in";
+                    tableBody.innerHTML = "";
+                    return;
+                }
+                if(response.status===404){
+                    tableBody.innerHTML = "<tr><td colspan='4'>No HOD records found</td></tr>"
+                    return;
+                }
+                const hods = await response.json();
+                tableBody.innerHTML="";
+                let n = Number (1);
+                hods.forEach(h=>{
+                    const row = `
+                    <tr>
+                        <td>${n}</td>
+                        <td>${h.name}</td>
+                        <td>${h.department}</td>
+                    </tr>
+                    `;
+                    n+=1;
+                    tableBody.innerHTML+=row;
+                });
+                
+            }
+            catch(err){
+                console.error("Error : "+err);
+                document.getElementById("message").textContent="Failed to load HOD record";
+            }
+        }
+        fetchHOD()
+    </script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        #form{
+            display: flex;
+            padding: 20px;
+            border: 1px solid violet;
+            border-radius: 10px;
+            background-color: rgb(235, 177, 235);
+            flex-direction: column;
+            transition: transform 0.3s ease;    
+        }
+        #form:hover{
+            transform: scale(1.05);
+            transition-duration: 1s;
+            box-shadow: 0 4px 6px rgb(103, 7, 103);
+        }
+        input{
+            padding: 5px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Create faculty</h2>
+    <div id="f">
+    <form id="form" name="f1" onsubmit="return validateForm(event)">
+          <label for="name" id="nameLabel">Faculty name</label>
+          <input type="text" name="name" id="name" placeholder="enter name" required>
+          <br>
+          <label for="faculty_code" id="fcLabel">Faculty code</label>
+          <input type="text" name="faculty_code" id="faculty_code" placeholder="enter faculty code" required>
+          <br>
+          <label for="department" id="deptLabel">Department</label>
+          <input type="text" name="department" id="department" placeholder="Enter department" required>
+          <br>
+          <button type="submit" name="submit">Create</button>
+          </form>
+    </form>
+    <script>
+        async function validateForm(event){
+            if(event){
+                event.preventDefault();
+            }
+            const name = document.f1.name.value;
+            const faculty_code = document.f1.faculty_code.value;
+            const department = document.f1.department.value;
+
+            if(!/^[a-zA-Z .]+$/.test(name)){
+                alert('Name can be of only alphabets');
+                return false;
+            }
+
+            if(faculty_code.length!==3||!/^[A-Z0-9]+$/.test(faculty_code)){
+                alert('Faculty must be upper case and of 3 character length');
+                return false;
+            }
+
+            if(!/^[A-Z]+$/.test(department)||department.length>5){
+                alert('Department code cannot be more than 5 character length and only uppercase allowed');
+                return false;
+            }
+
+            try{
+                const data = {}
+                data.name = name;
+                data.faculty_code = faculty_code;
+                data.department = department;
+                const response = await fetch('http://localhost:4000/admin/faculty',{
+                    method:'POST',
+                    headers:{
+                        "Content-Type" : "application/json"
+                    },
+                    body : JSON.stringify(data),
+                    credentials:"include"
+                });
+                
+                const result = await response.json();
+                if(response.ok){
+                    alert('Faculty created successfullyy');
+                    window.location.href = 'adminFaculty.html';
+                    return true;
+                }
+                else{
+                    alert(result.message);
+                }
+            }
+              catch(err){
+                alert("Error: "+err.message);
+              }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+body{
+    height: 100vh;
+    margin: 0;
+    background-color: rgb(202, 191, 209);
+}
+
+#top{
+    display: flex;
+    margin-top: 0%;
+  background-color: rgba(101, 27, 211, 0.9);
+  padding: 0;
+  height: 20%;
+  align-items: center;
+}
+
+#logo{
+    height: 75px;
+    width: 83px;
+    border-radius: 15px;
+    margin-top: 11px;
+    margin-bottom: 8px;
+    margin-left: 15px;
+    margin-right: 10px;
+    font-size: large;
+}
+
+#clg{
+ 
+  margin: 0;
+    color: rgb(234, 239, 238);
+    font-size: large;
+}
+
+#fac{
+    color: rgb(19, 10, 72);
+    display: inline;
+    margin-left: 300px;
+    margin-right: 23px;
+    font-size: large;
+    padding-left: 25px;
+}
+
+#logout{
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    width: 15%;
+    background-color: rgb(146, 66, 220);
+    border: 1.5px;
+    transition: 0.3s;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+#logout:hover{
+     transform: scale(1.05);
+     background-color: rgb(152, 11, 233)
+     
+}
+#logout:active{
+    background-color: rgb(199, 178, 228);
+    color: rgb(3, 39, 48);
+    opacity: 0.7;
+}
+.left {
+    margin-top: 0px;
+    border-radius: 3px;
+    display: flex;
+    width: 330px; 
+    height: 97%;
+    flex-direction: column;
+    background-color: rgb(176, 147, 217);
+    padding-top: 15px; 
+}
+
+.left button {
+    width: 100%;            
+    padding: 23px 30px;      
+    background-color: transparent;
+    border: none;           
+    color: rgb(250, 248, 248);            
+    text-align: left;        
+    font-size: 24px;         
+    cursor: pointer;         
+    transition: 0.3s;        
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+    border-radius: 6px;
+}
+
+.left button:hover {
+    background-color: rgba(255, 255, 255, 0.2); 
+    padding-left: 32px; 
+}
+
+.left button:active{
+    background-color: rgb(199, 152, 225);
+    color: rgb(71, 22, 112);
+}
+.main{
+    display: flex;
+    height: 85vh;
+    width: 100%;
+}
+
+#mainFrame{
+
+    width: 311%;
+    height: 100%;
+    display: block;
+    border: none;
+}
+
+
