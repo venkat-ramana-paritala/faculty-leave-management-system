@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Request History</title>
     <style>
-       body{
+        body {
             height: 100vh;
             display: flex;
             align-items: center;
@@ -13,56 +14,64 @@
             font-family: sans-serif;
             background-color: transparent;
         }
+
         .table {
-               width: 90%;               
-               margin: 60px auto;        
-               border-collapse: collapse;
-               background-color: white;  
-               border-radius: 10px;      
-               overflow: hidden;         
-               box-shadow: 0 6px 8px rgba(0,0,0,0.1); 
-               font-family: sans-serif;
-               }
+            width: 90%;
+            margin: 60px auto;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-family: sans-serif;
+        }
 
 
-               .table th, .table td {
-                padding: 25px;            
-                text-align: left;         
-                border-bottom: 1px solid #ddd; 
-                font-size: large;
-                }
+        .table th,
+        .table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 16px;
+        }
 
-               .table-title {
-                background-color: rgb(211, 27, 27); 
-                color: white;
-                text-align: center !important; 
-                font-size: 28px;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                }
+        .table-title {
+            background-color: #450a0a;
+            /* Deep Burgundy */
+            color: white;
+            text-align: center !important;
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-                .col-headers th {
-                 background-color: rgb(217, 229, 237); 
-                 color: rgb(19, 64, 67);
-                 font-size: 22px;
-                  }
+        .col-headers th {
+            background-color: #f1f5f9;
+            /* Light Gray */
+            color: #334155;
+            /* Slate Gray */
+            font-size: 16px;
+        }
 
-                .err-message { color: red; }
+        .err-message {
+            color: #ef4444;
+        }
     </style>
 </head>
+
 <body>
     <h1> Requests History</h1>
     <table class="table" id="historyTable">
         <thead>
             <tr>
-               <th colspan="5" class="table-title">All applications</th>
+                <th colspan="5" class="table-title">All applications</th>
             </tr>
             <tr class="col-headers">
-               <th>From</th>
-               <th>To</th>
-               <th>Type</th>
-               <th>Status</th>
-               <th>Faculty</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Faculty</th>
             </tr>
         </thead>
         <tbody class="tbody" id="tbody">
@@ -73,37 +82,37 @@
     </table>
     <p id="message" class="err-message"></p>
     <script>
-        function cleanDate(string){
+        function cleanDate(string) {
             const s = new Date(string);
             return s.toLocaleDateString();
         }
         async function fetchHistory() {
-            try{
-                const response = await fetch("http://localhost:4000/hod/requestHistory",{
-                    method :"GET",
-                    credentials :"include"
+            try {
+                const response = await fetch("http://localhost:4000/hod/requestHistory", {
+                    method: "GET",
+                    credentials: "include"
                 });
                 const tableBody = document.getElementById("tbody");
                 const message = document.getElementById("message");
-                if(response.status===401||response.status===403){
-                    message.textContent="You are not logged in";
+                if (response.status === 401 || response.status === 403) {
+                    message.textContent = "You are not logged in";
                     tableBody.innerHTML = "";
                     return;
                 }
-                if(response.status===404){
+                if (response.status === 404) {
                     tableBody.innerHTML = "<tr><td colspan='4'>No previous reject/approval of leaves found</td></tr>"
                     return;
                 }
                 const leaves = await response.json();
-                tableBody.innerHTML="";
-                leaves.forEach(leave=>{
-                        let color = "black";
-                        if(leave.status==='Approved'){
-                            color='green';
-                        }
-                        else if(leave.status==='Rejected'){
-                            color='red';
-                        }
+                tableBody.innerHTML = "";
+                leaves.forEach(leave => {
+                    let color = "black";
+                    if (leave.status === 'Approved') {
+                        color = 'green';
+                    }
+                    else if (leave.status === 'Rejected') {
+                        color = 'red';
+                    }
                     const row = `
                     <tr>
                         <td>${cleanDate(leave.from)}</td>
@@ -113,16 +122,17 @@
                         <td>${leave.faculty_name}</td>
                     </tr>
                     `;
-                    tableBody.innerHTML+=row;
+                    tableBody.innerHTML += row;
                 });
-                
+
             }
-            catch(err){
-                console.error("Error : "+err);
-                document.getElementById("message").textContent="Failed to load history";
+            catch (err) {
+                console.error("Error : " + err);
+                document.getElementById("message").textContent = "Failed to load history";
             }
         }
         fetchHistory()
     </script>
 </body>
+
 </html>

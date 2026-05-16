@@ -1,61 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>admin Profile</title>
     <style>
-        body{
+        body {
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-direction: column;
             font-family: sans-serif;
+            background-color: #f8fafc;
         }
-        #profile{
+
+        #profile {
             padding: 20px;
-            border: 1px solid rgb(83, 6, 6);
-            border-radius: 15px;
-            background-color: rgb(176, 17, 197);
-            box-shadow: 0 3px 4px rgb(95, 7, 7);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             width: 300px;
             text-align: center;
         }
-        h2{
+
+        h2 {
             padding: 5px;
-            margin: 5px;
-            color: rgb(251, 250, 250);
+            margin: 5px 0;
+            color: #1e293b;
+            font-size: 18px;
             text-align: left;
         }
+
         button {
             margin: 5px;
             cursor: pointer;
-            padding: 5px 10px;
+            padding: 8px 16px;
+            background-color: #1e293b;
+            color: white;
+            border: none;
+            border-radius: 6px;
         }
+
+        button:hover {
+            background-color: #334155;
+        }
+
         /* FIX 1: Added CSS to actually hide the forms */
         .hidden-form {
             display: none;
             margin-top: 15px;
-            border-top: 1px solid #7f1d1d;
+            border-top: 1px solid #e2e8f0;
             padding-top: 10px;
         }
+
         input {
             padding: 5px;
             margin-bottom: 5px;
             width: 90%;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
         }
     </style>
 </head>
+
 <body>
-    <h1>HOD Profile</h1>
+    <h1>Admin Profile</h1>
     <div id="profile">
         <h2 id="name">Name : Loading...</h2>
         <br>
-        
+
         <button id="ename" onclick="showForm('nameForm')" type="button">Edit name</button>
         <button id="epass" onclick="showForm('passForm')" type="button">Change Password</button>
-        
+
         <div id="nameForm" class="hidden-form">
             <input type="text" id="newName" placeholder="Enter new name">
             <br>
@@ -80,61 +99,61 @@
 
         // --- Functions are now OUTSIDE (Global Scope) ---
 
-        async function getProfile(){
-            try{
-                const response = await fetch('http://localhost:4000/admin/getProfile',{
-                    method:'GET',
-                    credentials:"include"
+        async function getProfile() {
+            try {
+                const response = await fetch('http://localhost:4000/admin/getProfile', {
+                    method: 'GET',
+                    credentials: "include"
                 });
 
-                if(response.status===401||response.status===403){
+                if (response.status === 401 || response.status === 403) {
                     alert('You are not logged in');
-                    window.location.href='index.html';
+                    window.location.href = 'index.html';
                     return;
                 }
-                if(response.status===404){
+                if (response.status === 404) {
                     alert('Profile not found');
                     return;
                 }
 
                 const result = await response.json();
-                document.getElementById("name").textContent=`Name : ${result.admin_id}`;
-                
+                document.getElementById("name").textContent = `Name : ${result.admin_id}`;
+
                 // Pre-fill the name input
                 document.getElementById("newName").value = result.name;
             }
-            catch(err){
+            catch (err) {
                 console.error(err);
             }
         }
 
-        function hideForm(){
-            document.getElementById('nameForm').style.display='none';
-            document.getElementById('passForm').style.display='none';
+        function hideForm() {
+            document.getElementById('nameForm').style.display = 'none';
+            document.getElementById('passForm').style.display = 'none';
         }
 
-        function showForm(id){
+        function showForm(id) {
             hideForm(); // Close others first
             document.getElementById(id).style.display = 'block';
         }
 
         async function updateProfile(type) {
             let data = {};
-            
-            if(type === 'name'){
+
+            if (type === 'name') {
                 const name = document.getElementById('newName').value;
                 // FIX 2: Added return to stop execution if invalid
-                if(!name || name.length===0){
+                if (!name || name.length === 0) {
                     alert('Name cannot be empty');
-                    return; 
+                    return;
                 }
                 data.name = name;
             }
 
-            else if(type === 'password'){
+            else if (type === 'password') {
                 const pass = document.getElementById('newPass').value;
                 // FIX 3: Added return here too
-                if(pass.length < 6){
+                if (pass.length < 6) {
                     alert('Password must be at least 6 characters');
                     return;
                 }
@@ -143,17 +162,17 @@
 
             try {
                 const response = await fetch('http://localhost:4000/admin/profile', {
-                    method:'PUT',
-                    headers : {
-                        "Content-Type" : "application/json"
+                    method: 'PUT',
+                    headers: {
+                        "Content-Type": "application/json"
                     },
-                    body : JSON.stringify(data),
-                    credentials:"include"
+                    body: JSON.stringify(data),
+                    credentials: "include"
                 })
-                
+
                 const result = await response.json();
-                
-                if(response.ok){
+
+                if (response.ok) {
                     alert(result.mssg);
                     hideForm(); // FIX 4: Corrected name (singular)
                     getProfile(); // FIX 5: Corrected name (was loadData)
@@ -161,10 +180,11 @@
                     alert(result.mssg || "Update failed");
                 }
             }
-            catch(err){
+            catch (err) {
                 alert("Error: " + err);
             }
         }
     </script>
 </body>
+
 </html>

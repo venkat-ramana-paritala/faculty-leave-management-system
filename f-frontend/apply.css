@@ -1,44 +1,59 @@
-body{
+body {
     display: flex;
     height: 95vh;
     align-items: center;
     justify-content: center;
-    background-color: rgba(156, 187, 213, 0.667);
+    background-color: #f1f5f9;
+    /* Light Gray instead of blue/cyan overlay */
     font-size: large;
 }
 
-#apply{
-    box-shadow: 0 4px 6px rgba(29, 47, 62, 0.667);
-    background-color: rgb(27, 174, 211);
+#apply {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Soft shadow */
+    background-color: #ffffff;
+    /* Clean white */
     display: flex;
     padding: 30px;
-    border: 1px solid rgb(175, 175, 225);
-    border-radius: 15px;
+    border: 1px solid #e2e8f0;
+    /* Subtle border */
+    border-radius: 8px;
+    /* Modern border radius */
     flex-direction: column;
     width: 220px;
 }
 
-#apply:hover{
+#apply:hover {
     transform: scale(1.05);
     transition-duration: 1s;
     box-shadow: 0 6px 8px rgba(29, 47, 62, 0.667);
 }
 
-.radio{
-     background-color: rgb(255, 255, 255);
-    border: 1px solid rgb(190, 157, 157);
-    border-radius: 10px;
+#apply label {
+    color: #1e293b !important;
+    /* Dark navy text instead of white */
+}
+
+#apply caption {
+    color: #1e293b !important;
+}
+
+.radio {
+    background-color: rgb(255, 255, 255);
+    border: 1px solid #cbd5e1;
+    /* Cleaner gray border */
+    border-radius: 6px;
     margin: 5px;
     display: flex;
     align-items: center;
     gap: 9px;
 }
 
-.radio :hover{
-     
+.radio :hover {
+
     transition-duration: 0.5s;
 }
-.radio :active{
+
+.radio :active {
     opacity: 0.5;
 }
-

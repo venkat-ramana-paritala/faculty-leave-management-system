@@ -1,20 +1,21 @@
-body{
+body {
     height: 100vh;
     margin: 0;
-    background-color: rgb(191, 209, 209);
-    
+    background-color: #f1f5f9;
+    /* Professional Light Gray */
 }
 
-#top{
+#top {
     display: flex;
     margin-top: 0%;
-  background-color: rgba(27, 174, 211, 0.9);
-  padding: 0;
-  height: 20%;
-  align-items: center;
+    background-color: #1e293b;
+    /* Professional Navy */
+    padding: 0;
+    height: 20%;
+    align-items: center;
 }
 
-#logo{
+#logo {
     height: 75px;
     width: 82.5px;
     border-radius: 10px;
@@ -24,91 +25,99 @@ body{
     margin-right: 6.5px;
 }
 
-#clg{
- 
+#clg {
     font-size: 120%;
     margin: 10px;
-    color: rgb(234, 239, 238);
+    color: #f1f5f9;
+    /* Crisp White/Light Gray */
 }
 
-#fac{
+#fac {
     font-size: 130%;
-    color: rgb(19, 64, 67);
+    color: #f1f5f9;
+    /* White text looks better on navy */
     display: inline;
     margin-left: 450px;
     margin-right: 22px;
 }
 
-#logout{
-    height: 50%;
+#logout {
     color: white;
-    padding: 10px;
-    border-radius: 20px;
-    width: 15%;
-    background-color: rgb(10, 200, 234);
-    border: 1px;
+    padding: 8px 20px;
+    /* Standard button padding */
+    border-radius: 6px;
+    /* Modern border radius */
+    width: auto;
+    /* Replaced 15% to stop stretching */
+    background-color: #475569;
+    /* Muted slate gray */
+    border: none;
     transition: 0.3s;
     cursor: pointer;
     margin-right: 15px;
-    font-size: large;
+    font-size: 16px;
+    /* Slightly smaller, more standard font size */
 }
 
-#logout:hover{
-     transform: scale(1.05);
-     background-color: rgb(108, 225, 246)
-     
+#logout:hover {
+    background-color: #64748b;
+    /* Lighter slate on hover */
 }
-#logout:active{
-    background-color: rgb(178, 220, 228);
-    color: rgb(3, 39, 48);
+
+#logout:active {
+    background-color: #94a3b8;
+    color: white;
     opacity: 0.7;
 }
+
 .left {
     margin-top: 0px;
     border-radius: 2px;
     display: flex;
-    width: 330px; 
+    width: 330px;
     height: 98%;
     flex-direction: column;
-    background-color: rgb(147, 180, 217);
-    padding-top: 10px; 
+    background-color: #334155;
+    /* Slate Gray instead of Light Blue */
+    padding-top: 10px;
 }
 
 .left button {
-    width: 100%;            
-    padding: 22.5px 30px;      
+    width: 100%;
+    padding: 15px 20px;
+    /* Tighter padding */
     background-color: transparent;
-    border: none;           
-    color: white;            
-    text-align: left;        
-    font-size: 24px;         
-    cursor: pointer;         
-    transition: 0.3s;        
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+    border: none;
+    color: white;
+    text-align: left;
+    font-size: 18px;
+    /* Slightly smaller text */
+    cursor: pointer;
+    transition: 0.3s;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 4px;
 }
 
 .left button:hover {
-    background-color: rgba(255, 255, 255, 0.2); 
-    padding-left: 25px; 
+    background-color: rgba(255, 255, 255, 0.1);
+    /* Subtle hover */
+    padding-left: 25px;
 }
 
-.left button:active{
-    background-color: rgb(152, 184, 225);
-    color: rgb(22, 79, 112);
+.left button:active {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
 }
-.main{
+
+.main {
     display: flex;
     height: 85vh;
     width: 100%;
 }
 
-#mainFrame{
-
+#mainFrame {
     width: 310%;
     height: 100%;
     display: block;
     border: none;
 }
-
-

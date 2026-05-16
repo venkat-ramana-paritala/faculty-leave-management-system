@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Prototype — Professional College UI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="prototype.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <div class="logo">COLLEGE</div>
+        <div class="tag">Faculty Leave Management</div>
+      </div>
+      <nav class="main-nav">
+        <a class="nav-link" href="#">Home</a>
+        <a class="nav-link" href="#">Apply</a>
+        <a class="nav-link" href="#">Requests</a>
+        <a class="nav-link" href="#">Profile</a>
+      </nav>
+      <div class="role-samples" aria-hidden="true">
+        <span class="role-badge role-faculty">Faculty</span>
+        <span class="role-badge role-admin">Admin</span>
+        <span class="role-badge role-hod">HOD</span>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-secondary">Sign out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main-grid">
+    <aside class="sidebar">
+      <nav class="side-nav">
+        <a class="side-link active" href="#">Dashboard</a>
+        <a class="side-link" href="#">Pending Requests</a>
+        <a class="side-link" href="#">History</a>
+        <a class="side-link" href="#">Settings</a>
+      </nav>
+      <div class="support-card">
+        <div class="sc-title">Quick Actions</div>
+        <button class="btn btn-primary block">New Leave</button>
+        <button class="btn btn-outline block">Export CSV</button>
+      </div>
+    </aside>
+
+    <section class="content">
+      <div class="page-head">
+        <h1>Admin Dashboard</h1>
+        <div class="controls">
+          <button class="btn btn-outline">Filters</button>
+          <button class="btn btn-primary">Create Request</button>
+        </div>
+      </div>
+
+      <section class="cards">
+        <article class="card">
+          <h3>Pending Leaves</h3>
+          <p class="muted">12 requests awaiting approval</p>
+        </article>
+        <article class="card">
+          <h3>Active Faculty</h3>
+          <p class="muted">84 active faculty</p>
+        </article>
+        <article class="card">
+          <h3>Recent Approvals</h3>
+          <p class="muted">3 approved in last week</p>
+        </article>
+      </section>
+
+      <section class="panel">
+        <h2>Quick Apply</h2>
+        <form class="form-grid">
+          <div class="form-row">
+            <label>Faculty</label>
+            <input placeholder="Select faculty name" />
+          </div>
+          <div class="form-row">
+            <label>From</label>
+            <input type="date" />
+          </div>
+          <div class="form-row">
+            <label>To</label>
+            <input type="date" />
+          </div>
+          <div class="form-row full">
+            <label>Reason</label>
+            <textarea rows="3" placeholder="Short reason"></textarea>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-secondary">Save Draft</button>
+            <button class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+      </section>
+
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">© 2026 College Name — All rights reserved.</div>
+  </footer>
+</body>
+</html>
