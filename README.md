@@ -1,83 +1,189 @@
-Faculty Leave Management System
-Project Details
+# Faculty Leave Management System
 
-The Faculty Leave Management System is a role-based web application designed to manage faculty leave requests within an academic department. The system defines three roles — Admin, HOD, and Faculty — each with controlled access and responsibilities. Faculty members can apply for leave and request substitution, HOD can approve or reject requests, and Admin manages departments and users and handles offline leave applications. The application enforces business rules and role-based access control at the backend level to ensure secure workflow handling.
+## Overview
 
-Tech Stack
+Faculty Leave Management System is a role-based web application designed to streamline faculty leave administration within academic departments.
 
-Frontend:
-- React 18
-- React DOM
-- React Scripts
+The system provides secure workflows for Faculty, HODs, and Administrators, ensuring that leave requests are processed efficiently while maintaining proper approval hierarchies and departmental records. The application enforces role-based access control at the backend level and includes advanced leave validation, substitution management, overlap detection, and offline leave handling.
 
-Backend:
-- Node.js
-- Express.js
-- MongoDB
+---
 
-Why I Built This Project
+## Features
 
-This project was developed to gain a clear understanding of backend system design and real-world workflow implementation. It focuses on authentication and role-based authorization using secure cookies, RESTful API design, database modeling and validation, and structured backend–frontend communication. The frontend has been modernized to React for improved component reusability and state management, while maintaining secure API integration with the backend.
+### Faculty
 
-Functionality
-Faculty
+* Secure authentication and authorization
+* Apply for full-day or half-day leave
+* Request substitute faculty during leave periods
+* Automatic leave balance tracking
+* View leave history and approval status
+* Leave date validation and conflict prevention
 
-Secure login
+### HOD
 
-Apply for leave with date validation
+* View department leave requests
+* Approve or reject leave applications
+* Review substitute faculty assignments
+* View department leave history
+* Transaction-safe approval workflow
 
-View leave balance (Total / Used / Remaining)
+### Admin
 
-View leave history and status
+* Create and manage Faculty accounts
+* Create and manage HOD accounts
+* Manage departments and organizational structure
+* View all leave records across departments
+* Process offline leave applications submitted manually
+* Monitor system-wide leave activity
 
-HOD
+---
 
-View pending leave requests
+## Advanced Business Rules
 
-Approve or reject requests
+### Leave Overlap Detection
 
-View recent department leave history
+The system prevents faculty members from applying for leave on dates that overlap with existing approved or pending leave requests.
 
-Admin
+### Half-Day Leave Support
 
-Create and manage Faculty and HOD accounts
+Faculty members can apply for half-day leave, providing greater flexibility and more accurate leave accounting.
 
-View all leave records
+### Substitute Faculty Assignment
 
-Maintain departmental structure
+Faculty can assign a substitute instructor while applying for leave, ensuring uninterrupted academic activities.
 
-Further Improvements
+### Offline Leave Management
 
-Improve frontend UI/UX design and responsiveness
+Administrators can record and manage leave applications submitted through offline channels, allowing departments to maintain complete leave records.
 
-Allow faculty to apply leave for selected periods with better visualization
+### Transaction-Safe Approval Handling
 
-Assign an on-duty substitute faculty during leave
+Leave approval operations are designed to maintain data consistency and prevent race conditions during approval workflows.
 
-Implement leave date overlap detection
+### Role-Based Access Control (RBAC)
 
-Add transaction-safe approval handling
+Backend-enforced authorization ensures that users can access only the resources and actions permitted by their assigned roles.
 
-Deploy the application to a cloud platform
+---
 
-Set-up instructions:
-  1. clone repository
-      git clone https://github.com/venkat-ramana-paritala/faculty-leave-management-system.git
-      cd faculty-leave-management-system
-  2. Install backend dependencies
-      cd f-backend
-      npm install
-  3. Create a .env file inside the f-backend folder and add the following:
-      PORT=5000
-      DB_URL=your_mongodb_connection_string
-      JWT_SECRET=your_secret_key
-      ADMIN_PASS=admin_password
-      FAC_PASS=faculty_default_password
-      HOD_PASS=hod_default_password
-  4. Start the backend server
-       node server.js
-  5. Start the frontend React app
-       cd ../f-frontend-react
-       npm install
-       npm start
-       Open http://localhost:3000 in your browser.
+## Tech Stack
+
+### Frontend
+
+* React 18
+* React DOM
+* React Scripts
+
+### Backend
+
+* Node.js
+* Express.js
+
+### Database
+
+* MongoDB
+* Mongoose
+
+### Authentication & Security
+
+* JWT Authentication
+* HTTP-Only Secure Cookies
+* Role-Based Authorization
+
+---
+
+## Project Goals
+
+This project was built to gain practical experience in:
+
+* Backend architecture and workflow design
+* REST API development
+* Authentication and authorization systems
+* Database schema design and validation
+* Role-based access control
+* Full-stack application development
+* Transaction handling and business rule enforcement
+* Frontend-backend integration
+
+---
+
+## Installation
+
+### 1. Clone Repository
+
+```bash
+git clone https://github.com/venkat-ramana-paritala/faculty-leave-management-system.git
+
+cd faculty-leave-management-system
+```
+
+### 2. Install Backend Dependencies
+
+```bash
+cd f-backend
+
+npm install
+```
+
+### 3. Configure Environment Variables
+
+Create a `.env` file inside the `f-backend` directory:
+
+```env
+PORT=5000
+
+DB_URL=your_mongodb_connection_string
+
+JWT_SECRET=your_secret_key
+
+ADMIN_PASS=admin_password
+
+FAC_PASS=faculty_default_password
+
+HOD_PASS=hod_default_password
+```
+
+### 4. Start Backend Server
+
+```bash
+node server.js
+```
+
+### 5. Start Frontend Application
+
+```bash
+cd ../f-frontend-react
+
+npm install
+
+npm start
+```
+
+Open:
+
+```text
+http://localhost:3000
+```
+
+---
+
+## System Roles
+
+| Role    | Responsibilities                                                |
+| ------- | --------------------------------------------------------------- |
+| Faculty | Apply leave, assign substitutes, view leave balance and history |
+| HOD     | Review, approve, or reject leave requests                       |
+| Admin   | Manage users, departments, and offline leave records            |
+
+---
+
+## Future Enhancements
+
+* Email notifications for leave status updates
+* Calendar-based leave visualization
+* Faculty workload balancing
+* Department-wise analytics dashboard
+* Multi-level approval workflows
+* Audit logs and activity tracking
+
+This project was developed for educational and learning purposes while exploring full-stack web development concepts and enterprise workflow implementation.
