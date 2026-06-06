@@ -37,7 +37,7 @@ import User from './db/models/userModel.js';
 import Department from './db/models/departmentModel.js';
 import bcrypt from 'bcrypt';
 
-app.listen(process.env.PORT, async () => {
+app.listen(process.env.PORT || 4001, async () => {
     await connectDB();
     console.log(`server started at port ${process.env.PORT}`);
 

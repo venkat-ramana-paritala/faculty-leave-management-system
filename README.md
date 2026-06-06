@@ -1,25 +1,23 @@
 Faculty Leave Management System
 Project Details
 
-The Faculty Leave Management System is a role-based web application designed to manage faculty leave requests within an academic department. The system defines three roles — Admin, HOD, and Faculty — each with controlled access and responsibilities. Faculty members can apply for leave, HOD can approve or reject requests, and Admin manages departments and users. The application enforces business rules and role-based access control at the backend level to ensure secure workflow handling.
+The Faculty Leave Management System is a role-based web application designed to manage faculty leave requests within an academic department. The system defines three roles — Admin, HOD, and Faculty — each with controlled access and responsibilities. Faculty members can apply for leave and request substitution, HOD can approve or reject requests, and Admin manages departments and users and handles offline leave applications. The application enforces business rules and role-based access control at the backend level to ensure secure workflow handling.
 
 Tech Stack
 
-HTML5
+Frontend:
+- React 18
+- React DOM
+- React Scripts
 
-CSS3
-
-Vanilla JavaScript
-
-Node.js
-
-Express.js
-
-MongoDB
+Backend:
+- Node.js
+- Express.js
+- MongoDB
 
 Why I Built This Project
 
-This project was developed to gain a clear understanding of backend system design and real-world workflow implementation. It focuses on authentication and role-based authorization using secure cookies, RESTful API design, database modeling and validation, and structured backend–frontend communication using the Fetch API. The goal was to understand how authentication, business logic, and database operations work together in a secure and organized system.
+This project was developed to gain a clear understanding of backend system design and real-world workflow implementation. It focuses on authentication and role-based authorization using secure cookies, RESTful API design, database modeling and validation, and structured backend–frontend communication. The frontend has been modernized to React for improved component reusability and state management, while maintaining secure API integration with the backend.
 
 Functionality
 Faculty
