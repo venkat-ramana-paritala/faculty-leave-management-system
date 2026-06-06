@@ -9,6 +9,7 @@ body {
   font-family: 'Inter', 'Segoe UI', sans-serif;
   background-color: #f1f5f9;
   color: #1e293b;
+  -webkit-text-size-adjust: 100%;
 }
 
 /* ---- LOGIN PAGE ---- */
@@ -19,6 +20,7 @@ body {
   justify-content: center;
   flex-direction: column;
   background-color: #f1f5f9;
+  padding: 20px;
 }
 
 .login-page h2 {
@@ -39,6 +41,7 @@ body {
   align-items: center;
   background-color: #ffffff;
   width: 320px;
+  max-width: 100%;
   padding: 30px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
@@ -118,6 +121,8 @@ body {
   padding: 10px 20px;
   background-color: #1e293b;
   color: white;
+  position: relative;
+  z-index: 100;
 }
 
 .top-bar .logo-area {
@@ -168,6 +173,24 @@ body {
   background-color: #450a0a;
 }
 
+/* ── Hamburger Menu Button ─────────────────────────────────── */
+.hamburger-btn {
+  display: none;
+  background: none !important;
+  border: none !important;
+  color: white !important;
+  font-size: 24px !important;
+  cursor: pointer;
+  padding: 4px 8px !important;
+  line-height: 1;
+  border-radius: 4px !important;
+  transition: background-color 0.15s;
+}
+
+.hamburger-btn:hover {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
 /* Main body = sidebar + content */
 .main-body {
   display: flex;
@@ -183,6 +206,7 @@ body {
   flex-direction: column;
   padding: 10px 0;
   flex-shrink: 0;
+  transition: transform 0.3s ease;
 }
 
 .sidebar.admin {
@@ -212,6 +236,11 @@ body {
   background-color: rgba(255, 255, 255, 0.2);
   color: white;
   font-weight: bold;
+}
+
+/* ── Mobile Sidebar Overlay ───────────────────────────────── */
+.sidebar-overlay {
+  display: none;
 }
 
 /* Content area */
@@ -505,7 +534,9 @@ body {
 .badge-casual { background: #dcfce7; color: #166534; }
 .badge-long { background: #fef9c3; color: #854d0e; }
 
-/* ---- RESPONSIVE DESIGN ---- */
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE DESIGN — TABLET (≤ 900px)
+   ═══════════════════════════════════════════════════════════════ */
 
 @media (max-width: 900px) {
   .top-bar .logo-area h4 {
@@ -513,7 +544,13 @@ body {
   }
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE DESIGN — MOBILE (≤ 768px)
+   ═══════════════════════════════════════════════════════════════ */
+
 @media (max-width: 768px) {
+
+  /* ── Dashboard Layout ─────────────────────────────────── */
   .dashboard {
     height: auto;
     min-height: 100vh;
@@ -522,48 +559,81 @@ body {
   .main-body {
     flex-direction: column;
     overflow: visible;
+    position: relative;
   }
 
-  .sidebar {
-    width: 100%;
-    flex-direction: row;
-    overflow-x: auto;
-    padding: 0;
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    scrollbar-width: none; /* Firefox */
+  /* ── Hamburger visible on mobile ──────────────────────── */
+  .hamburger-btn {
+    display: block;
   }
-  
-  .sidebar::-webkit-scrollbar {
-    display: none; /* Chrome/Safari */
+
+  /* ── Sidebar: off-screen drawer ──────────────────────── */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 260px;
+    height: 100vh;
+    z-index: 200;
+    transform: translateX(-100%);
+    padding: 20px 0;
+    overflow-y: auto;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
   }
 
   .sidebar button {
     white-space: nowrap;
-    padding: 15px 20px;
-    flex: 0 0 auto;
-    border-bottom: 3px solid transparent;
+    padding: 14px 24px;
+    font-size: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .sidebar button.active {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-bottom: 3px solid white;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-left: 4px solid white;
   }
 
+  /* ── Sidebar overlay backdrop ───────────────────────── */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 199;
+    backdrop-filter: blur(2px);
+  }
+
+  .sidebar-overlay.active {
+    display: block;
+  }
+
+  /* ── Top bar ─────────────────────────────────────────── */
   .top-bar {
-    padding: 10px;
+    padding: 10px 12px;
   }
 
   .top-bar .logo-area h4 {
     display: none;
   }
 
-  .content-area {
-    padding: 15px;
+  .top-bar h5 {
+    font-size: 12px;
   }
 
-  /* Table responsiveness */
+  /* ── Content area ────────────────────────────────────── */
+  .content-area {
+    padding: 15px 12px;
+    min-height: calc(100vh - 56px);
+  }
+
+  /* ── Tables: horizontal scroll ──────────────────────── */
   .data-table {
     display: block;
     width: 100%;
@@ -575,34 +645,129 @@ body {
   .data-table td {
     padding: 10px 12px;
     font-size: 13px;
+    white-space: nowrap;
   }
 
+  .data-table .table-title {
+    font-size: 14px;
+    padding: 12px;
+    white-space: normal;
+  }
+
+  /* ── Forms, cards ────────────────────────────────────── */
   .form-card, .profile-card, .apply-container {
     max-width: 100% !important;
-    padding: 20px !important;
+    padding: 16px !important;
   }
-  
+
+  .form-card input,
+  .form-card select,
+  .form-card textarea {
+    font-size: 16px; /* prevent iOS zoom */
+  }
+
+  /* ── Stats strip ─────────────────────────────────────── */
   .stats-strip {
-    flex-direction: column;
+    flex-direction: row;
+    gap: 8px;
   }
-  
+
   .stat-card {
     min-width: 0;
-    width: 100%;
+    flex: 1;
+    padding: 10px 12px;
+    text-align: center;
+  }
+
+  .stat-card div:first-child {
+    font-size: 1.4rem !important;
+  }
+
+  /* ── Buttons: larger touch targets ──────────────────── */
+  .btn-approve,
+  .btn-reject {
+    padding: 10px 16px;
+    font-size: 14px;
+    min-height: 44px;
+  }
+
+  .profile-card .action-buttons button {
+    padding: 10px 16px;
+    font-size: 14px;
+    min-height: 44px;
+  }
+
+  /* ── Approve/reject action columns on mobile ─────────── */
+  td textarea {
+    font-size: 14px !important;
+    min-height: 50px;
+  }
+
+  /* ── Apply leave type cards ─────────────────────────── */
+  .type-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .type-card {
+    padding: 24px !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE DESIGN — SMALL PHONE (≤ 480px)
+   ═══════════════════════════════════════════════════════════════ */
 
 @media (max-width: 480px) {
   .top-bar {
     flex-direction: row;
     justify-content: space-between;
+    gap: 8px;
   }
-  
+
   .top-bar h5 {
     display: none;
   }
 
+  .top-bar button {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
   .login-box {
-    width: 90%;
+    width: 100%;
+    padding: 20px;
+  }
+
+  .login-page h2 {
+    font-size: 1.2rem;
+  }
+
+  /* Even tighter content padding */
+  .content-area {
+    padding: 10px 8px;
+  }
+
+  .stats-strip {
+    flex-direction: column;
+  }
+
+  .stat-card {
+    width: 100%;
+  }
+
+  /* Stack action buttons vertically on very small screens */
+  td .btn-approve,
+  td .btn-reject {
+    display: block;
+    width: 100%;
+    margin-bottom: 4px;
+  }
+
+  h2 {
+    font-size: 1.15rem;
+  }
+
+  h3 {
+    font-size: 1rem;
   }
 }

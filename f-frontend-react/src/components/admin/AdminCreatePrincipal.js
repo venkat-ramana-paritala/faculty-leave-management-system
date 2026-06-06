@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-
-const API = 'http://localhost:4000';
+import API from '../../api';
 
 function AdminCreatePrincipal({ onDone }) {
   const [name, setName] = useState('');

@@ -38,7 +38,9 @@ router.get('/home', async (req, res) => {
             extendedLeaveType: l.extendedLeaveType,
             from:              l.from,
             to:                l.to,
+            reason:            l.reason,
             durationType:      l.durationType,
+            halfDayPeriod:     l.halfDayPeriod,
             principalAction:   l.principalAction,
             principalActionAt: l.principalActionAt
         }));
@@ -107,6 +109,15 @@ router.put('/request/:leaveId', async (req, res) => {
                 const days = leave.durationType === 'HALF'
                     ? 0.5
                     : Math.floor((new Date(leave.to) - new Date(leave.from)) / (1000 * 60 * 60 * 24)) + 1;
+
+                // Bug E Fix: Check if faculty has enough leave balance
+                const currentBalance = (faculty.casualLeave.total || 15) - (faculty.casualLeave.used || 0);
+                if (days > currentBalance) {
+                    return res.status(400).json({ 
+                        mssg: `Cannot approve: Faculty has only ${currentBalance} casual leave(s) remaining but this leave requires ${days} day(s).` 
+                    });
+                }
+
                 faculty.casualLeave.used = (faculty.casualLeave.used || 0) + days;
                 await faculty.save();
             }

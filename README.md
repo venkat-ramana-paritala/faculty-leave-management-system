@@ -78,5 +78,8 @@ Set-up instructions:
       HOD_PASS=hod_default_password
   4. Start the backend server
        node server.js
-  5. Open the front end
-       Navigate to the f-frontend folder and open index.html in your browser.
+  5. Start the frontend React app
+       cd ../f-frontend-react
+       npm install
+       npm start
+       Open http://localhost:3000 in your browser.

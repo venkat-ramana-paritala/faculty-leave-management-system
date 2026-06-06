@@ -11,6 +11,7 @@ import AdminOfflineLeave from '../components/admin/AdminOfflineLeave';
 
 function AdminDashboard({ onLogout }) {
   const [activePage, setActivePage] = useState('faculty');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   async function logout() {
     try {
@@ -29,6 +30,11 @@ function AdminDashboard({ onLogout }) {
     }
   }
 
+  function navigate(page) {
+    setActivePage(page);
+    setSidebarOpen(false);
+  }
+
   function renderContent() {
     if (activePage === 'faculty') return <AdminFaculty />;
     if (activePage === 'createFaculty') return <AdminCreateFaculty onDone={() => setActivePage('faculty')} />;
@@ -45,6 +51,9 @@ function AdminDashboard({ onLogout }) {
     <div className="dashboard">
       <div className="top-bar admin">
         <div className="logo-area">
+          <button className="hamburger-btn" onClick={() => setSidebarOpen(!sidebarOpen)}>
+            {sidebarOpen ? '✕' : '☰'}
+          </button>
           <h4>Kakatiya Institute Of Technology &amp; Science, Warangal</h4>
         </div>
         <h5>Welcome, Admin!</h5>
@@ -52,52 +61,58 @@ function AdminDashboard({ onLogout }) {
       </div>
 
       <div className="main-body">
-        <div className="sidebar admin">
+        {/* Overlay backdrop for mobile */}
+        <div
+          className={`sidebar-overlay ${sidebarOpen ? 'active' : ''}`}
+          onClick={() => setSidebarOpen(false)}
+        />
+
+        <div className={`sidebar admin ${sidebarOpen ? 'open' : ''}`}>
           <button
             className={activePage === 'faculty' ? 'active' : ''}
-            onClick={() => setActivePage('faculty')}
+            onClick={() => navigate('faculty')}
           >
             Faculty
           </button>
           <button
             className={activePage === 'createFaculty' ? 'active' : ''}
-            onClick={() => setActivePage('createFaculty')}
+            onClick={() => navigate('createFaculty')}
           >
             Create Faculty
           </button>
           <button
             className={activePage === 'hod' ? 'active' : ''}
-            onClick={() => setActivePage('hod')}
+            onClick={() => navigate('hod')}
           >
             HOD
           </button>
           <button
             className={activePage === 'createHOD' ? 'active' : ''}
-            onClick={() => setActivePage('createHOD')}
+            onClick={() => navigate('createHOD')}
           >
             Create HOD
           </button>
           <button
             className={activePage === 'leaves' ? 'active' : ''}
-            onClick={() => setActivePage('leaves')}
+            onClick={() => navigate('leaves')}
           >
             Leaves
           </button>
           <button
             className={activePage === 'departments' ? 'active' : ''}
-            onClick={() => setActivePage('departments')}
+            onClick={() => navigate('departments')}
           >
             Departments
           </button>
           <button
             className={activePage === 'offline' ? 'active' : ''}
-            onClick={() => setActivePage('offline')}
+            onClick={() => navigate('offline')}
           >
             Offline Leave
           </button>
           <button
             className={activePage === 'profile' ? 'active' : ''}
-            onClick={() => setActivePage('profile')}
+            onClick={() => navigate('profile')}
           >
             Profile
           </button>

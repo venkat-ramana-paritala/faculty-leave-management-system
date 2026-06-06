@@ -111,6 +111,18 @@ router.post('/apply', async (req, res) => {
             return res.status(400).json({ mssg: "You already have a pending or approved leave during these dates." });
         }
 
+        // Bug A Fix: Check if the applicant is committed as a substitute for someone else's active leave
+        const substituteCommitment = await Leave.findOne({
+            substituteId: faculty._id,
+            substituteStatus: 'VALID',
+            status: { $in: ['PENDING', 'FORWARDED', 'APPROVED'] },
+            from: { $lte: toDate },
+            to:   { $gte: fromDate }
+        });
+        if (substituteCommitment) {
+            return res.status(400).json({ mssg: "You are committed as a substitute for another faculty's leave during these dates. You cannot apply leave for this period." });
+        }
+
         const newLeaveData = {
             facultyId: faculty._id,
             departmentId: faculty.departmentId,
@@ -198,12 +210,20 @@ router.post('/apply', async (req, res) => {
         const hod = await User.findOne({ departmentId: faculty.departmentId, role: 'HOD' });
         newLeaveData.hodId = hod ? hod._id : null;
 
+        // Bug D Fix: HOD applying casual leave should NOT skip substitute step
         if (faculty.role === 'HOD') {
-            newLeaveData.currentStage = 'PRINCIPAL';
-            newLeaveData.status = 'FORWARDED';
-            newLeaveData.hodAction = 'FORWARDED';
-            newLeaveData.hodRemarks = 'Auto-forwarded (applicant is HOD)';
-            newLeaveData.hodActionAt = new Date();
+            if (category === 'CASUAL') {
+                // Casual leave: keep at SUBSTITUTE stage so substitute can accept/reject
+                // HOD review will be auto-forwarded AFTER substitute accepts
+                // (currentStage already set to 'SUBSTITUTE' above)
+            } else {
+                // Extended leave: auto-forward past HOD stage to PRINCIPAL
+                newLeaveData.currentStage = 'PRINCIPAL';
+                newLeaveData.status = 'FORWARDED';
+                newLeaveData.hodAction = 'FORWARDED';
+                newLeaveData.hodRemarks = 'Auto-forwarded (applicant is HOD)';
+                newLeaveData.hodActionAt = new Date();
+            }
         }
 
         const newLeave = new Leave(newLeaveData);
@@ -258,8 +278,42 @@ router.put('/substituteRequest/:leaveId', async (req, res) => {
         }
 
         if (action === 'ACCEPTED') {
+            // Bug B Fix: Re-validate substitute availability before accepting
+            const subOwnLeave = await Leave.findOne({
+                facultyId: req.user._id,
+                status: { $in: ['PENDING', 'FORWARDED', 'APPROVED'] },
+                from: { $lte: leave.to },
+                to:   { $gte: leave.from }
+            });
+            if (subOwnLeave) {
+                return res.status(400).json({ mssg: "You cannot accept — you now have your own leave during these dates." });
+            }
+
+            const subAlreadyCommitted = await Leave.findOne({
+                substituteId: req.user._id,
+                _id: { $ne: leave._id },
+                substituteStatus: 'VALID',
+                status: { $in: ['PENDING', 'FORWARDED', 'APPROVED'] },
+                from: { $lte: leave.to },
+                to:   { $gte: leave.from }
+            });
+            if (subAlreadyCommitted) {
+                return res.status(400).json({ mssg: "You cannot accept — you are already committed as substitute for another leave during these dates." });
+            }
+
             leave.substituteStatus = 'VALID';
-            leave.currentStage = 'HOD';
+
+            // Bug D continued: If the applicant is HOD, auto-forward past HOD stage
+            const applicant = await User.findById(leave.facultyId);
+            if (applicant && applicant.role === 'HOD') {
+                leave.currentStage = 'PRINCIPAL';
+                leave.status = 'FORWARDED';
+                leave.hodAction = 'FORWARDED';
+                leave.hodRemarks = 'Auto-forwarded (applicant is HOD)';
+                leave.hodActionAt = new Date();
+            } else {
+                leave.currentStage = 'HOD';
+            }
         } else {
             leave.substituteStatus = 'INVALID';
             leave.status = 'REJECTED'; 

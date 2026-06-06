@@ -71,8 +71,8 @@ function HodProfile() {
         <div className="info-row">Name: <strong>{profileData.name}</strong></div>
         <div className="info-row">Email: <strong>{profileData.email}</strong></div>
         <div className="info-row">Faculty Code: <strong>{profileData.facultyCode}</strong></div>
-        <div className="info-row">Department: <strong>{profileData.department?.name || profileData.department}</strong></div>
-        <div className="info-row">Casual Leave Balance: <strong>{profileData.casualLeave?.balance} / {profileData.casualLeave?.total}</strong></div>
+        <div className="info-row">Department: <strong>{profileData.departmentId?.name || profileData.department?.name || profileData.department}</strong></div>
+        <div className="info-row">Casual Leave Balance: <strong>{profileData.casualLeave?.balance ?? (profileData.casualLeave?.total - profileData.casualLeave?.used)} / {profileData.casualLeave?.total}</strong></div>
 
         <div className="action-buttons">
           <button onClick={() => setShowForm(showForm === 'name' ? null : 'name')}>

@@ -7,10 +7,16 @@ import PrincipalProfile from '../components/principal/PrincipalProfile';
 
 function PrincipalDashboard({ onLogout }) {
   const [activePage, setActivePage] = useState('home');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   async function handleLogout() {
     await fetch(`${API}/auth/logout`, { method: 'POST', credentials: 'include' });
     onLogout();
+  }
+
+  function navigate(page) {
+    setActivePage(page);
+    setSidebarOpen(false);
   }
 
   function renderPage() {
@@ -35,6 +41,9 @@ function PrincipalDashboard({ onLogout }) {
       {/* Top bar */}
       <div className="top-bar" style={{ backgroundColor: '#1e3a8a' }}>
         <div className="logo-area">
+          <button className="hamburger-btn" onClick={() => setSidebarOpen(!sidebarOpen)}>
+            {sidebarOpen ? '✕' : '☰'}
+          </button>
           <h4>Kakatiya Institute Of Technology &amp; Science, Warangal</h4>
         </div>
         <h5>Welcome, Principal!</h5>
@@ -43,13 +52,19 @@ function PrincipalDashboard({ onLogout }) {
 
       {/* Main body = sidebar + content */}
       <div className="main-body">
+        {/* Overlay backdrop for mobile */}
+        <div
+          className={`sidebar-overlay ${sidebarOpen ? 'active' : ''}`}
+          onClick={() => setSidebarOpen(false)}
+        />
+
         {/* Sidebar */}
-        <div className="sidebar" style={{ backgroundColor: '#1e3a8a' }}>
+        <div className={`sidebar ${sidebarOpen ? 'open' : ''}`} style={{ backgroundColor: '#1e3a8a' }}>
           {navItems.map(item => (
             <button
               key={item.key}
               className={activePage === item.key ? 'active' : ''}
-              onClick={() => setActivePage(item.key)}
+              onClick={() => navigate(item.key)}
             >
               {item.label}
             </button>

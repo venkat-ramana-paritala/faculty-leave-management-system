@@ -11,6 +11,7 @@ import Almanac from '../components/faculty/Almanac';
 
 function FacultyDashboard({ onLogout }) {
   const [activePage, setActivePage] = useState('home');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   async function logout() {
     try {
@@ -29,6 +30,11 @@ function FacultyDashboard({ onLogout }) {
     }
   }
 
+  function navigate(page) {
+    setActivePage(page);
+    setSidebarOpen(false);
+  }
+
   function renderContent() {
     if (activePage === 'home') return <FacultyHome />;
     if (activePage === 'apply') return <ApplyLeave />;
@@ -45,6 +51,9 @@ function FacultyDashboard({ onLogout }) {
     <div className="dashboard">
       <div className="top-bar">
         <div className="logo-area">
+          <button className="hamburger-btn" onClick={() => setSidebarOpen(!sidebarOpen)}>
+            {sidebarOpen ? '✕' : '☰'}
+          </button>
           <h4>Kakatiya Institute Of Technology &amp; Science, Warangal</h4>
         </div>
         <h5>Welcome, Faculty!</h5>
@@ -52,52 +61,58 @@ function FacultyDashboard({ onLogout }) {
       </div>
 
       <div className="main-body">
-        <div className="sidebar">
+        {/* Overlay backdrop for mobile */}
+        <div
+          className={`sidebar-overlay ${sidebarOpen ? 'active' : ''}`}
+          onClick={() => setSidebarOpen(false)}
+        />
+
+        <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
           <button
             className={activePage === 'home' ? 'active' : ''}
-            onClick={() => setActivePage('home')}
+            onClick={() => navigate('home')}
           >
             Home
           </button>
           <button
             className={activePage === 'apply' ? 'active' : ''}
-            onClick={() => setActivePage('apply')}
+            onClick={() => navigate('apply')}
           >
             Apply Leave
           </button>
           <button
             className={activePage === 'substitute' ? 'active' : ''}
-            onClick={() => setActivePage('substitute')}
+            onClick={() => navigate('substitute')}
           >
             Substitute Requests
           </button>
           <button
             className={activePage === 'history' ? 'active' : ''}
-            onClick={() => setActivePage('history')}
+            onClick={() => navigate('history')}
           >
             Leave History
           </button>
           <button
             className={activePage === 'rules' ? 'active' : ''}
-            onClick={() => setActivePage('rules')}
+            onClick={() => navigate('rules')}
           >
             Rules &amp; Regulations
           </button>
           <button
             className={activePage === 'almanac' ? 'active' : ''}
-            onClick={() => setActivePage('almanac')}
+            onClick={() => navigate('almanac')}
           >
             Almanac
           </button>
           <button
             className={activePage === 'help' ? 'active' : ''}
-            onClick={() => setActivePage('help')}
+            onClick={() => navigate('help')}
           >
             HELP
           </button>
           <button
             className={activePage === 'profile' ? 'active' : ''}
-            onClick={() => setActivePage('profile')}
+            onClick={() => navigate('profile')}
           >
             Profile
           </button>

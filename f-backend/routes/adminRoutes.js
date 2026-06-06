@@ -274,8 +274,57 @@ router.post('/offline-leave', upload.single('document'), async (req, res) => {
 
         const fromDate = new Date(from);
         const toDate = new Date(to);
+        fromDate.setHours(0,0,0,0);
+        toDate.setHours(0,0,0,0);
         const diffTime = Math.abs(toDate - fromDate);
         const numDays = durationType === 'HALF' ? 0.5 : Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+        // Bug C Fix: Check if faculty already has overlapping leave
+        const overlappingLeave = await Leave.findOne({
+            facultyId,
+            status: { $in: ['PENDING', 'FORWARDED', 'APPROVED'] },
+            from: { $lte: toDate },
+            to:   { $gte: fromDate }
+        });
+        if (overlappingLeave) {
+            return res.status(400).json({ mssg: "This faculty already has a pending or approved leave during these dates." });
+        }
+
+        // Bug C Fix: Check if faculty is committed as substitute during these dates
+        const substituteCommitment = await Leave.findOne({
+            substituteId: facultyId,
+            substituteStatus: 'VALID',
+            status: { $in: ['PENDING', 'FORWARDED', 'APPROVED'] },
+            from: { $lte: toDate },
+            to:   { $gte: fromDate }
+        });
+        if (substituteCommitment) {
+            return res.status(400).json({ mssg: "This faculty is committed as a substitute during these dates." });
+        }
+
+        // Bug C Fix: If substitute is provided, validate substitute availability
+        if (substituteId) {
+            const subOnLeave = await Leave.findOne({
+                facultyId: substituteId,
+                status: { $in: ['PENDING', 'FORWARDED', 'APPROVED'] },
+                from: { $lte: toDate },
+                to:   { $gte: fromDate }
+            });
+            if (subOnLeave) {
+                return res.status(400).json({ mssg: "Selected substitute is on leave during these dates." });
+            }
+
+            const subAssigned = await Leave.findOne({
+                substituteId: substituteId,
+                substituteStatus: 'VALID',
+                status: { $in: ['PENDING', 'FORWARDED', 'APPROVED'] },
+                from: { $lte: toDate },
+                to:   { $gte: fromDate }
+            });
+            if (subAssigned) {
+                return res.status(400).json({ mssg: "Selected substitute is already assigned for another leave during these dates." });
+            }
+        }
 
         // Auto-approve and deduct balance
         const newLeave = new Leave({

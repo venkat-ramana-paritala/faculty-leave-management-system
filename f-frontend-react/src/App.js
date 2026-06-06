@@ -19,15 +19,6 @@ function App() {
 
   return (
     <>
-      <div style={{ background: '#f59e0b', padding: '10px', textAlign: 'center', fontWeight: 'bold', fontSize: '0.8rem', borderBottom: '1px solid #d97706' }}>
-        🧪 TEST ACCESS (Bypass Login): 
-        <button onClick={() => setRole('FACULTY')} style={{margin: '0 5px', padding: '2px 6px', cursor: 'pointer'}}>Faculty</button>
-        <button onClick={() => setRole('HOD')} style={{margin: '0 5px', padding: '2px 6px', cursor: 'pointer'}}>HOD</button>
-        <button onClick={() => setRole('PRINCIPAL')} style={{margin: '0 5px', padding: '2px 6px', cursor: 'pointer'}}>Principal</button>
-        <button onClick={() => setRole('admin')} style={{margin: '0 5px', padding: '2px 6px', cursor: 'pointer'}}>Admin</button>
-        <button onClick={() => setRole(null)} style={{margin: '0 5px', padding: '2px 6px', cursor: 'pointer'}}>Reset to Login</button>
-      </div>
-
       {!role && <LoginPage onLogin={handleLogin} />}
       {role === 'FACULTY' && <FacultyDashboard onLogout={handleLogout} />}
       {role === 'HOD' && <HodDashboard onLogout={handleLogout} />}

@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import API from '../../api';
 
 function AdminProfile() {
-  const [profileData, setProfileData] = useState({ admin_id: '', name: '' });
-  const [showForm, setShowForm] = useState(null);
-  const [newName, setNewName] = useState('');
+  const [profileData, setProfileData] = useState({ admin_id: '' });
+  const [showForm, setShowForm] = useState(false);
   const [newPass, setNewPass] = useState('');
 
   useEffect(() => {
@@ -20,36 +19,27 @@ function AdminProfile() {
       if (response.ok) {
         const data = await response.json();
         setProfileData(data);
-        setNewName(data.name || '');
       }
     } catch (err) {
       console.error(err);
     }
   }
 
-  async function updateProfile(type) {
-    const data = {};
-    if (type === 'name') {
-      if (!newName) { alert('Name cannot be empty'); return; }
-      data.name = newName;
-    } else if (type === 'password') {
-      if (newPass.length < 6) { alert('Password must be at least 6 characters'); return; }
-      data.password = newPass;
-    }
+  async function updatePassword() {
+    if (newPass.length < 6) { alert('Password must be at least 6 characters'); return; }
 
     try {
       const response = await fetch(`${API}/admin/profile`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ password: newPass }),
         credentials: 'include',
       });
       const result = await response.json();
       if (response.ok) {
         alert(result.mssg);
-        setShowForm(null);
+        setShowForm(false);
         setNewPass('');
-        loadProfile();
       } else {
         alert(result.mssg || 'Update failed');
       }
@@ -63,32 +53,15 @@ function AdminProfile() {
       <h2>Admin Profile</h2>
       <div className="profile-card">
         <div className="info-row">Admin ID: <strong>{profileData.admin_id}</strong></div>
+        <div className="info-row">Role: <strong>Administrator</strong></div>
 
         <div className="action-buttons">
-          <button onClick={() => setShowForm(showForm === 'name' ? null : 'name')}>
-            Edit Name
-          </button>
-          <button onClick={() => setShowForm(showForm === 'password' ? null : 'password')}>
+          <button onClick={() => setShowForm(!showForm)}>
             Change Password
           </button>
         </div>
 
-        {showForm === 'name' && (
-          <div className="inline-form">
-            <input
-              type="text"
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-              placeholder="Enter new name"
-            />
-            <div className="save-cancel">
-              <button className="btn-save" onClick={() => updateProfile('name')}>Save</button>
-              <button className="btn-cancel" onClick={() => setShowForm(null)}>Cancel</button>
-            </div>
-          </div>
-        )}
-
-        {showForm === 'password' && (
+        {showForm && (
           <div className="inline-form">
             <input
               type="password"
@@ -97,8 +70,8 @@ function AdminProfile() {
               placeholder="Enter new password"
             />
             <div className="save-cancel">
-              <button className="btn-save" onClick={() => updateProfile('password')}>Save</button>
-              <button className="btn-cancel" onClick={() => setShowForm(null)}>Cancel</button>
+              <button className="btn-save" onClick={updatePassword}>Save</button>
+              <button className="btn-cancel" onClick={() => setShowForm(false)}>Cancel</button>
             </div>
           </div>
         )}
@@ -108,3 +81,4 @@ function AdminProfile() {
 }
 
 export default AdminProfile;
+
